@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Django App{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="//cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
+    <link rel="stylesheet" href="//cdn.datatables.net/2.0.2/css/dataTables.material.css">
+
+</head>
+<body>
+    <header>
+        <h2>Hasan Mertek</h2>
+        <nav>
+            <ul>
+              
+                <li><a href="{% url 'index' %}">Anasayfa</a></li>
+                <li><a href="{% url 'iha_list' %}">İhalarımız</a></li>
+                <li><a href="{% url 'login' %}">Giriş Yap</a></li>
+                <li><a href="{% url 'register' %}">Kayıt Ol</a></li>
+
+
+                
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% block body %}
+        
+        {% endblock %}
+    </main>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="//cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    <footer>
+        <p>&copy; 2024 All rights reserved.</p>
+    </footer>
+    
+</body>
+</html>

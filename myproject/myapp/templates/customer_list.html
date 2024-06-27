@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h1>Müşteri Ekle</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+</form>
+
+<h1>Müşteri Listesi</h1>
+<table id="customerTable" class="display cell-border">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Ad</th>
+            <th>Soyad</th>
+            <th>E-posta</th>
+            <th>Telefon</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for customer in customers %}
+        <tr>
+            <td>{{ customer.id }}</td>
+            <td>{{ customer.name }}</td>
+            <td>{{ customer.surname }}</td>
+            <td>{{ customer.email }}</td>
+            <td>{{ customer.phone }}</td>
+            <td>
+                <a href="{% url 'customer_edit' customer.id %}" class="btn btn-warning btn-sm">Düzenle</a>
+                <button type="button" class="btn btn-danger btn-sm" onclick="deleteCustomer({{ customer.id }})">Sil</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div id="success_delete" style="display: none; position: absolute; bottom: 80px; right: 10px; background-color: #36BA98; color: #fff; padding: 15px 30px; z-index: 9999999; border-radius: 16px;">
+    Müşteri başarıyla silindi.
+</div>
+
+<script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#customerTable').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.11.4/i18n/Turkish.json"
+        }
+    });
+});
+
+function deleteCustomer(customer_id) {
+    if (confirm("Müşteriyi silmek istediğinizden emin misiniz?")) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'customer_delete' %}",
+            headers: { "X-CSRFToken": "{{ csrf_token }}" },
+            data: { 'customer_id': customer_id },
+            dataType: "json",
+            success: function(response) {
+                if (response && response.message) {
+                    $('#success_delete').fadeIn();
+                    setTimeout(function() {
+                        $('#success_delete').fadeOut();
+                    }, 3000);
+                    $('#customerTable').DataTable().ajax.reload(null, false);
+                } else {
+                    alert('Müşteri silinirken bir hata oluştu.');
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('İstek gönderilirken bir hata oluştu.');
+            }
+        });
+    }
+}
+</script>
+{% endblock body %}

@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block body %}
+<link rel="stylesheet" href="//cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
+
+<h1>İHA Listesi</h1>
+<table id="iha_list" class="display cell-border w-100"></table>
+<a href="{% url 'iha_add' %}">Yeni İHA Ekle</a>
+<div id="success_delete" style="display: none; position: absolute;bottom: 80px;right: 10px; background-color: #36BA98;color: #fff;padding: 15px 30px;z-index: 9999999;border-radius: 16px;">
+    İha başarıyla silindi
+</div>
+{% endblock body %}
